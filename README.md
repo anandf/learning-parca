@@ -36,10 +36,11 @@ oc -n parca port-forward pods/$(oc get pods -l app.kubernetes.io/name=parca-agen
 oc apply -f pvc.yaml -n parca
 ```
 
-- Modify the data volume in parca server component to use the disk space from pvc
+- Modify the `data` volume in parca server component to use the disk space from pvc instead of `emptyDir`
 ```
-oc apply -f parca_deployment.yaml -n parca
+oc patch deploy parca -n parca --patch "$(cat parca-deploy-patch.json)"
 ```
+
 - Create the scraping config for pulling net/pprof profile data from ArgoCD components
 ```
 oc apply -f parca_cm.yaml -n parca

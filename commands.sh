@@ -12,6 +12,8 @@ oc -n parca port-forward pods/$(oc get pods -l app.kubernetes.io/name=parca-agen
 
 oc apply -f pvc.yaml -n parca
 
+oc patch deploy parca -n parca --patch "$(cat parca-deploy-patch.json)"
+
 oc new-project argocd
 oc apply -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/install.yaml -n argocd
 oc adm policy add-scc-to-user privileged -z argocd-redis -n argocd
