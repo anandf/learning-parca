@@ -12,7 +12,7 @@ oc -n parca port-forward pods/$(oc get pods -l app.kubernetes.io/name=parca-agen
 
 oc apply -f pvc.yaml -n parca
 
-oc patch deploy parca -n parca --patch "$(cat parca-deploy-patch.json)"
+oc patch deployment parca --type json -p='[{"op": "replace", "path": "/spec/template/spec/volumes/1", "value": {"name": "data", "persistentVolumeClaim":{"claimName": "parca-data"}}}]'
 
 oc new-project argocd
 oc apply -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/install.yaml -n argocd

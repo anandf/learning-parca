@@ -38,7 +38,7 @@ oc apply -f pvc.yaml -n parca
 
 - Modify the `data` volume in parca server component to use the disk space from pvc instead of `emptyDir`
 ```
-oc patch deploy parca -n parca --patch "$(cat parca-deploy-patch.json)"
+oc patch deployment parca --type json -p='[{"op": "replace", "path": "/spec/template/spec/volumes/1", "value": {"name": "data", "persistentVolumeClaim":{"claimName": "parca-data"}}}]'
 ```
 
 - Create the scraping config for pulling net/pprof profile data from ArgoCD components
